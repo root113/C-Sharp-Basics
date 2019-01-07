@@ -1,0 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace File
+{
+    class Program
+    {
+
+        public void WriteFile()
+        {
+            /*
+             * FileStream fs = fs.FileCreate(@"C:\cly.txt");
+             * fs.Close();
+             * StreamWriter sw = File.AppendText(@"C:\cly.txt");
+             * ...
+             */
+
+            FileStream fs = new FileStream("cly.txt", FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs);
+            
+            //Just writing smt
+            //You can change this part however you like
+            for (int i=0; i <= 10; i++)
+            {
+                sw.WriteLine("{0}", i * 10);
+            }
+            sw.Close();
+        }
+
+        public void ReadFile()
+        {
+            FileStream asf = new FileStream("cly.txt",FileMode.Open,FileAccess.Read);
+            StreamReader sr = new StreamReader(asf);
+            string str = sr.ReadLine();
+
+            while ( str != null)
+            {
+                Console.WriteLine(str);
+                str = sr.ReadLine();
+            }
+            sr.Close();
+        }
+
+        public void DeleteFile(string path)
+        {
+            if (!System.IO.File.Exists(path))
+            {
+                return;
+            }
+            bool isDeleted = false;
+            while (!isDeleted)
+            {
+                try
+                {
+                    System.IO.File.Delete(path);
+                    isDeleted = true;
+                }
+                catch (System.IO.IOException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            Program p = new Program();
+            string path = "cly.txt";
+            p.WriteFile();
+            p.ReadFile();
+
+            bool choise = false;
+            while (!choise)
+            {
+                Console.WriteLine("Would you like to delete the file ?");
+                Console.WriteLine("1 - Yes\t2 - No");
+                int anw = Convert.ToInt32(Console.ReadLine());
+
+                if (anw == 1)
+                {
+                    p.DeleteFile(path);
+                    Console.WriteLine("File deleted!");
+                    choise = true;
+                }
+                else if (anw == 2)
+                {
+                    choise = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choise!");
+                    choise = false;
+                }
+            }
+           
+            Console.ReadLine();
+        }
+    }
+}
